@@ -73,8 +73,7 @@ public class AddPointsView extends View {
 
         super.onDraw(canvas);
         for (PointF p : mVertices){
-            canvas.drawColor(Color.RED);
-            canvas.drawCircle(p.x * mWidth, p.y * mHeight, 0.0001f, mPaint);
+            canvas.drawCircle(p.x * mWidth, p.y * mHeight, 2.0f, mPaint);
             Log.e("would like to draw", "x" + p.x*mWidth + "\ty" + p.y*mHeight );
         }
 
