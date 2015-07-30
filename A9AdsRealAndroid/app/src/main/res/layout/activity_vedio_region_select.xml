@@ -5,10 +5,13 @@
     android:layout_height="fill_parent"
     >
     <FrameLayout
-        android:id="@+id/camera_preview"
+        android:id="@+id/cameraLayout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_weight="1" />
+        android:layout_weight="1" >
+
+
+    </FrameLayout>
 
 
 </LinearLayout>
