@@ -3,6 +3,7 @@ package a9.com.a9adsrealandroid;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.YuvImage;
 import android.hardware.Camera;
@@ -19,9 +20,8 @@ import java.io.IOException;
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
     private SurfaceHolder mHolder;
     private Camera mCamera;
-    private Activity mActivity;
     private String TAG = this.getClass().getName();
-
+    Activity mActivity;
 
     public CameraPreview(Activity activity, Camera camera) {
         super(activity.getApplicationContext());
@@ -51,26 +51,28 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                 public void onPreviewFrame(byte[] data, Camera camera) {
 
                     // process the image (just an example, you should do this inside an AsyncTask)
-                    Camera.Size previewSize = mCamera.getParameters().getPreviewSize();
-                    ByteArrayOutputStream out = new ByteArrayOutputStream();
-                    YuvImage yuvImage = new YuvImage(data, mCamera.getParameters().getPreviewFormat(), previewSize.width, previewSize.height, null);
-                    yuvImage.compressToJpeg(new Rect(0, 0, previewSize.width, previewSize.height), 100, out);
-                    byte[] imageBytes = out.toByteArray();
-
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inSampleSize = 1;
-                    Bitmap image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length, options);
+//                    Camera.Size previewSize = mCamera.getParameters().getPreviewSize();
+//                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+//                    YuvImage yuvImage = new YuvImage(data, mCamera.getParameters().getPreviewFormat(), previewSize.width, previewSize.height, null);
+//                    yuvImage.compressToJpeg(new Rect(0, 0, previewSize.width, previewSize.height), 100, out);
+//                    byte[] imageBytes = out.toByteArray();
+//
+//                    BitmapFactory.Options options = new BitmapFactory.Options();
+//                    options.inSampleSize = 1;
+//                    Bitmap image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length, options);
 
                     // you now have the image bitmap which you can use to apply your processing ...
-
-
+                    Log.e("called", "called!!");
                 }
             });
         } catch (IOException e) {
             Log.d(TAG, "Error setting camera preview: " + e.getMessage());
         }
 
+
+
     }
+
 
     public void surfaceDestroyed(SurfaceHolder holder) {
         // empty. Take care of releasing the Camera preview in your activity.

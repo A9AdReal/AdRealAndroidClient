@@ -1,5 +1,6 @@
 package a9.com.a9adsrealandroid;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -30,6 +31,7 @@ public class AddPointsView extends GLSurfaceView {
     private AdsImageRenderer mRenderer;
     float mWidth;
     float mHeight;
+    private VideoRegionSelectActivity mActivity;
 
     public void addPoint(PointF p){
         if(mVertices.size() < MAX_VERT){
@@ -38,8 +40,9 @@ public class AddPointsView extends GLSurfaceView {
         }
     }
 
-    public AddPointsView(Context context) {
+    public AddPointsView(Context context, VideoRegionSelectActivity ac) {
         super(context);
+        mActivity = ac;
         init(context);
     }
 
@@ -74,7 +77,8 @@ public class AddPointsView extends GLSurfaceView {
             float x = event.getX()/mWidth;
             float y = event.getY() / mHeight;
             Log.e("the location on screen ", "x: " + x + "\t y:" + y + "\n");
-            addPoint(new PointF(x, y));
+            PointF cornerPoint = mActivity.findCornerOnScreen(new PointF(x, y));
+            addPoint(cornerPoint);
         }
         return true;
     }

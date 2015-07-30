@@ -10,6 +10,7 @@ import java.util.Arrays;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -37,14 +38,16 @@ public class AdsImageRenderer implements Renderer {
     public ShortBuffer drawListBuffer;
     public FloatBuffer uvBuffer;
 
+
     // Our screenresolution
     float	mScreenWidth = 1280;
     float	mScreenHeight = 768;
-    //TODO fix me
+
+
 
     // Misc
     Context mContext;
-    int mProgram;
+
 
     public AdsImageRenderer(Context c)
     {
@@ -54,12 +57,8 @@ public class AdsImageRenderer implements Renderer {
 
     @Override
     public void onDrawFrame(GL10 unused) {
-
-
         // Render our example
         Render(mtrxProjectionAndView);
-
-        Log.e("render being called!!!", "being called!!");
     }
 
     public void updateCoord(ArrayList<PointF> points){
@@ -71,7 +70,7 @@ public class AdsImageRenderer implements Renderer {
             for (int i = 0; i < points.size(); i++) {
                 PointF p = points.get(i);
                 int ind = i * COORDS_PER_VERTEX;
-                vertices[ind + 0] = (1.0f - p.x) * mScreenWidth;
+                vertices[ind + 0] =  p.x * mScreenWidth;
                 vertices[ind + 1] = (1.0f - p.y) * mScreenHeight;
             }
         }

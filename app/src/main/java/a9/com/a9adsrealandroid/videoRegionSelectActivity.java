@@ -16,6 +16,8 @@ import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.RelativeLayout;
 
+import java.util.ArrayList;
+
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -23,7 +25,7 @@ import android.widget.RelativeLayout;
  *
  * @see SystemUiHider
  */
-public class videoRegionSelectActivity extends Activity{
+public class VideoRegionSelectActivity extends Activity{
     private Camera mCamera;
     private CameraPreview mCameraPreview;
     private AddPointsView mAddPointsView;
@@ -43,7 +45,7 @@ public class videoRegionSelectActivity extends Activity{
         FrameLayout preview = (FrameLayout) findViewById(R.id.cameraLayout);
         preview.addView(mCameraPreview);
         //prepare to add points on AddPointsView
-        mAddPointsView = new AddPointsView(this.getApplicationContext());
+        mAddPointsView = new AddPointsView(this.getApplicationContext(), this);
         preview.addView(mAddPointsView);
         //init the button
         bRenderRegion = new Button(this);
@@ -79,6 +81,24 @@ public class videoRegionSelectActivity extends Activity{
     }
 
 
+
+    public PointF findCornerOnScreen(PointF curP){
+        return findCornerOnScreen(curP, null);
+    }
+
+    //TODO implement this using JNI
+    public PointF findCornerOnScreen(PointF curP, byte[] preFrame){
+        return curP;
+    }
+
+    public void trackingPoint(byte[] preFrame, byte[] curFrame){
+        trackingPoint(null, preFrame, curFrame);
+    }
+
+    //TODO implement this
+    public ArrayList<PointF> trackingPoint(ArrayList<PointF> curPs, byte[] preFrame, byte[] curFrame){
+        return curPs;
+    }
 
     public static Camera getCameraInstance(){
         Camera c = null;
