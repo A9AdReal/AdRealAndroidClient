@@ -29,7 +29,8 @@ public class VideoRegionSelectActivity extends Activity{
     private Button bRenderRegion;
     private Button bReset;
     private Button bChooseAds;
-
+    private int mWidth;
+    private int mHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,14 +40,16 @@ public class VideoRegionSelectActivity extends Activity{
 
         mCamera = getCameraInstance();
         mCameraPreview = new CameraPreview(this, mCamera);
+        mWidth = mCamera.getParameters().getPreviewSize().width;
+        mHeight = mCamera.getParameters().getPreviewSize().height;
         FrameLayout preview = (FrameLayout) findViewById(R.id.cameraLayout);
         preview.addView(mCameraPreview);
         //add render view to the layout
         mRenderView = new RenderView(this.getApplicationContext(), this);
         preview.addView(mRenderView);
         //add point view to the layout
-        mAddPointsView = new AddPointsView(this.getApplicationContext());
-        preview.addView(mAddPointsView);
+//        mAddPointsView = new AddPointsView(this.getApplicationContext());
+//        preview.addView(mAddPointsView);
         //init the button
         bRenderRegion = new Button(this);
         bRenderRegion.setText("Render");
@@ -82,29 +85,28 @@ public class VideoRegionSelectActivity extends Activity{
 
 
     public PointF findCornerOnScreen(PointF curP){
-        return findCornerOnScreen(curP, mCameraPreview.getFrameData());
+        float[] res = findCornerOnScreen(curP, mCameraPreview.getFrameData(), mWidth, mHeight);
+        return Utils.arrayToPoint(res);
     }
 
     //TODO implement this using JNI
-    public PointF findCornerOnScreen(PointF curP, byte[] preFrame){
-        return curP;
+    public float[] findCornerOnScreen(PointF curP, byte[] preFrame, int width, int height){
+        return new float[]{0, 1};
     }
 
     public void trackingPoint(byte[] preFrame, byte[] curFrame){
-        ArrayList<PointF> ps = trackingPoint(mRenderView.getVertices(), preFrame, curFrame);
-        mRenderView.updateVertices(ps);
-
+        float[] ps = trackingPoint(Utils.objectToArray(mRenderView.getVertices()), preFrame, curFrame, mWidth, mHeight);
+        mRenderView.updateVertices(Utils.arrayToObject(ps));
     }
 
     //TODO implement this
-    public ArrayList<PointF> trackingPoint(ArrayList<PointF> curPs, byte[] preFrame, byte[] curFrame){
+    public float[] trackingPoint(float[] curPs, byte[] preFrame, byte[] curFrame, int width, int height){
         return curPs;
     }
 
+
     //TODO impliment this
-    public void init(){
-        return;
-    }
+    public native void init();
 
     public static Camera getCameraInstance(){
         Camera c = null;
