@@ -43,8 +43,6 @@ public class AdsImageRenderer implements Renderer {
     float	mScreenWidth = 1280;
     float	mScreenHeight = 768;
 
-
-
     // Misc
     Context mContext;
 
@@ -212,7 +210,7 @@ public class AdsImageRenderer implements Renderer {
         // Temporary create a bitmap
         Bitmap bmp = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.sample);
 
-        // Bind texture to texturename
+        // Bind texture to texture name
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texturenames[0]);
 

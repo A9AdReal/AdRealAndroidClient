@@ -3,18 +3,14 @@ package a9.com.a9adsrealandroid;
 import a9.com.a9adsrealandroid.util.SystemUiHider;
 
 import android.app.Activity;
-import android.graphics.Point;
 import android.graphics.PointF;
 import android.os.Bundle;
 import android.hardware.Camera;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
-import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 
@@ -28,6 +24,7 @@ import java.util.ArrayList;
 public class VideoRegionSelectActivity extends Activity{
     private Camera mCamera;
     private CameraPreview mCameraPreview;
+    private RenderView mRenderView;
     private AddPointsView mAddPointsView;
     private Button bRenderRegion;
     private Button bReset;
@@ -44,17 +41,19 @@ public class VideoRegionSelectActivity extends Activity{
         mCameraPreview = new CameraPreview(this, mCamera);
         FrameLayout preview = (FrameLayout) findViewById(R.id.cameraLayout);
         preview.addView(mCameraPreview);
-        //prepare to add points on AddPointsView
-        mAddPointsView = new AddPointsView(this.getApplicationContext(), this);
+        //add render view to the layout
+        mRenderView = new RenderView(this.getApplicationContext(), this);
+        preview.addView(mRenderView);
+        //add point view to the layout
+        mAddPointsView = new AddPointsView(this.getApplicationContext());
         preview.addView(mAddPointsView);
         //init the button
         bRenderRegion = new Button(this);
-//        bRenderRegion.setWidth(100);
         bRenderRegion.setText("Render");
         bRenderRegion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mAddPointsView.pleaseRender();
+                mRenderView.pleaseRender();
             }
         });
 
@@ -64,7 +63,7 @@ public class VideoRegionSelectActivity extends Activity{
         bReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mAddPointsView.resetRegion();
+                mRenderView.resetRegion();
             }
         });
         //
@@ -83,7 +82,7 @@ public class VideoRegionSelectActivity extends Activity{
 
 
     public PointF findCornerOnScreen(PointF curP){
-        return findCornerOnScreen(curP, null);
+        return findCornerOnScreen(curP, mCameraPreview.getFrameData());
     }
 
     //TODO implement this using JNI
@@ -92,7 +91,9 @@ public class VideoRegionSelectActivity extends Activity{
     }
 
     public void trackingPoint(byte[] preFrame, byte[] curFrame){
-        trackingPoint(null, preFrame, curFrame);
+        ArrayList<PointF> ps = trackingPoint(mRenderView.getVertices(), preFrame, curFrame);
+        mRenderView.updateVertices(ps);
+
     }
 
     //TODO implement this

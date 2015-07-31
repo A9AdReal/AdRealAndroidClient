@@ -21,13 +21,15 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     private SurfaceHolder mHolder;
     private Camera mCamera;
     private String TAG = this.getClass().getName();
-    Activity mActivity;
+    private VideoRegionSelectActivity mActivity;
+    private byte[] mFrameData;
+    private static int timeThres = 200; //in milliseconds
+    private static long mPreTime;
 
-    public CameraPreview(Activity activity, Camera camera) {
+    public CameraPreview(VideoRegionSelectActivity activity, Camera camera) {
         super(activity.getApplicationContext());
         mCamera = camera;
         mActivity = activity;
-
         // Install a SurfaceHolder.Callback so we get notified when the
         // underlying surface is created and destroyed.
         mHolder = getHolder();
@@ -40,6 +42,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         if (mCamera == null) {
             return;
         }
+        mPreTime = System.currentTimeMillis();
         // The Surface has been created, now tell the camera where to draw the
         // preview.
         try {
@@ -49,7 +52,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
                 @Override
                 public void onPreviewFrame(byte[] data, Camera camera) {
-
+                    long curTime = System.currentTimeMillis();
                     // process the image (just an example, you should do this inside an AsyncTask)
 //                    Camera.Size previewSize = mCamera.getParameters().getPreviewSize();
 //                    ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -60,17 +63,22 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 //                    BitmapFactory.Options options = new BitmapFactory.Options();
 //                    options.inSampleSize = 1;
 //                    Bitmap image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length, options);
-
-                    // you now have the image bitmap which you can use to apply your processing ...
-                    Log.e("called", "called!!");
+                    if(curTime - mPreTime > timeThres) {
+                        // you now have the image bitmap which you can use to apply your processing ...
+                        //TODO add a timer here, to control the updation
+                        mFrameData = data;
+                        mActivity.trackingPoint(null, data);
+                        mPreTime = curTime;
+                    }
                 }
             });
         } catch (IOException e) {
             Log.d(TAG, "Error setting camera preview: " + e.getMessage());
         }
+    }
 
-
-
+    public byte[] getFrameData() {
+        return mFrameData;
     }
 
 
