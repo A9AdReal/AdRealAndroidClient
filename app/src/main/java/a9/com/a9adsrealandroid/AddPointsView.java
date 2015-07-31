@@ -33,12 +33,7 @@ public class AddPointsView extends GLSurfaceView {
     float mHeight;
     private VideoRegionSelectActivity mActivity;
 
-    public void addPoint(PointF p){
-        if(mVertices.size() < MAX_VERT){
-            mVertices.add(p);
-            mRenderer.updateCoord(mVertices);
-        }
-    }
+
 
     public AddPointsView(Context context, VideoRegionSelectActivity ac) {
         super(context);
@@ -69,7 +64,12 @@ public class AddPointsView extends GLSurfaceView {
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
     }
 
-
+    public void addPoint(PointF p){
+        if(mVertices.size() < MAX_VERT){
+            mVertices.add(p);
+            mRenderer.updateCoord(mVertices);
+        }
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {

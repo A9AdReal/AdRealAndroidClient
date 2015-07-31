@@ -100,6 +100,11 @@ public class VideoRegionSelectActivity extends Activity{
         return curPs;
     }
 
+    //TODO impliment this
+    public void init(){
+        return;
+    }
+
     public static Camera getCameraInstance(){
         Camera c = null;
         try {
